@@ -10,7 +10,7 @@ users = {
     "user@ticketbook.kz": {
         "password": "user123",
         "role": "user",
-        "name": "Асель Нурланова",
+        "name": "Пользователь",
     },
 }
 

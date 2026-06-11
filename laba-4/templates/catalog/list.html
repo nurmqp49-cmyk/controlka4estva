@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Афиша — TicketBook{% endblock %}
+{% block content %}
+
+<div class="catalog-header">
+  <h1>Афиша мероприятий</h1>
+
+  <!-- Filter bar -->
+  <form method="get" class="filter-bar">
+    <select name="category">
+      <option value="">Все категории</option>
+      {% for key, label in categories.items() %}
+        <option value="{{ key }}" {% if selected_cat == key %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <input type="date" name="date" value="{{ selected_date }}">
+    <button type="submit" class="btn-outline">Применить</button>
+    <a href="{{ url_for('catalog.list_events') }}" class="btn-ghost">Сбросить</a>
+  </form>
+</div>
+
+{% if events %}
+<div class="event-grid">
+  {% for ev in events %}
+  <article class="event-card">
+    <div class="ec-badge ec-badge--{{ ev.category }}">{{ categories[ev.category] }}</div>
+    <div class="ec-body">
+      <h2 class="ec-title">{{ ev.title }}</h2>
+      <p class="ec-meta">📅 {{ ev.date }} &nbsp;⏰ {{ ev.time }}</p>
+      <p class="ec-venue">📍 {{ ev.venue }}</p>
+      <div class="ec-footer">
+        <span class="ec-price">{{ ev.price }} ₸</span>
+        <span class="ec-seats {% if ev.seats_left < 20 %}seats-low{% endif %}">
+          Мест: {{ ev.seats_left }}
+        </span>
+        <a href="{{ url_for('catalog.event_detail', event_id=ev.id) }}" class="btn-outline btn-sm">
+          Подробнее
+        </a>
+      </div>
+    </div>
+    {% if session.user_role == 'admin' %}
+    <div class="ec-admin-bar">
+      <a href="{{ url_for('catalog.edit_event', event_id=ev.id) }}" class="btn-ghost btn-xs">✏️ Изменить</a>
+      <form method="post" action="{{ url_for('catalog.delete_event', event_id=ev.id) }}" style="display:inline">
+        <button type="submit" class="btn-ghost btn-xs btn-danger" onclick="return confirm('Удалить мероприятие?')">🗑 Удалить</button>
+      </form>
+    </div>
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <span>🎭</span>
+  <p>Мероприятий не найдено. Попробуйте изменить фильтры.</p>
+</div>
+{% endif %}
+
+{% endblock %}

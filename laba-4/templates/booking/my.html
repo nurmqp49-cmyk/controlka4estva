@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Мои билеты — TicketBook{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Мои бронирования</h1>
+</div>
+
+{% if bookings %}
+<div class="booking-list">
+  {% for bk in bookings %}
+  <div class="booking-row status-{{ bk.status }}">
+    <div class="br-main">
+      <h3 class="br-title">{{ bk.event_title }}</h3>
+      <p class="br-meta">📅 {{ bk.event_date }} &nbsp;⏰ {{ bk.event_time }}</p>
+      <p class="br-meta">📍 {{ bk.venue }}</p>
+      <p class="br-meta small">ID брони: <code>{{ bk.id }}</code></p>
+    </div>
+    <div class="br-side">
+      <span class="status-badge status-{{ bk.status }}">
+        {% if bk.status == 'pending' %}⏳ Ожидает оплаты
+        {% elif bk.status == 'paid' %}✅ Оплачено
+        {% elif bk.status == 'cancelled' %}❌ Отменено
+        {% else %}{{ bk.status }}{% endif %}
+      </span>
+      <p class="br-price">{{ bk.total_price }} ₽ &nbsp;({{ bk.quantity }} шт.)</p>
+      <div class="br-actions">
+        {% if bk.status == 'pending' %}
+          <a href="{{ url_for('payment.pay', booking_id=bk.id) }}" class="btn-primary btn-sm">Оплатить</a>
+          <form method="post" action="{{ url_for('booking.cancel_booking', booking_id=bk.id) }}" style="display:inline">
+            <button type="submit" class="btn-ghost btn-sm" onclick="return confirm('Отменить бронирование?')">Отменить</button>
+          </form>
+        {% elif bk.status == 'paid' %}
+          <a href="{{ url_for('payment.confirmation', booking_id=bk.id) }}" class="btn-outline btn-sm">Подтверждение</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <span>🎟️</span>
+  <p>У вас пока нет бронирований.</p>
+  <a href="{{ url_for('catalog.list_events') }}" class="btn-primary">Перейти в афишу</a>
+</div>
+{% endif %}
+
+{% endblock %}

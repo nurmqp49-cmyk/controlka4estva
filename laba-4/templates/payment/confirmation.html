@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Оплата подтверждена — TicketBook{% endblock %}
+{% block content %}
+
+<div class="confirm-wrap">
+  <div class="confirm-icon">✅</div>
+  <h1 class="confirm-title">Оплата прошла успешно!</h1>
+  <p class="confirm-sub">Ваши билеты забронированы и ожидают вас.</p>
+
+  <div class="confirm-card">
+    <h2>{{ booking.event_title }}</h2>
+    <dl class="detail-meta">
+      <dt>Дата и время</dt><dd>{{ booking.event_date }} в {{ booking.event_time }}</dd>
+      <dt>Площадка</dt>   <dd>{{ booking.venue }}</dd>
+      <dt>Билетов</dt>    <dd>{{ booking.quantity }} шт.</dd>
+      <dt>Оплачено</dt>   <dd class="price-big">{{ booking.total_price }} ₽</dd>
+      <dt>ID брони</dt>   <dd><code>{{ booking.id }}</code></dd>
+      <dt>Статус</dt>     <dd><span class="status-badge status-paid">✅ paid</span></dd>
+      {% if booking.paid_at %}<dt>Время оплаты</dt><dd>{{ booking.paid_at }}</dd>{% endif %}
+    </dl>
+  </div>
+
+  <div class="confirm-actions">
+    <a href="{{ url_for('booking.my_bookings') }}" class="btn-primary">Мои билеты</a>
+    <a href="{{ url_for('catalog.list_events') }}" class="btn-outline">В афишу</a>
+  </div>
+
+  <p class="confirm-email-note">📧 Уведомление отправлено на {{ booking.user_email }}</p>
+</div>
+
+{% endblock %}

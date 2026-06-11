@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{% if action == 'create' %}Новое мероприятие{% else %}Изменить мероприятие{% endif %} — TicketBook{% endblock %}
+{% block content %}
+
+<div class="form-wrap">
+  <h2>{% if action == 'create' %}Создать мероприятие{% else %}Редактировать мероприятие{% endif %}</h2>
+
+  <form method="post" class="tb-form">
+    <label>Название
+      <input type="text" name="title" value="{{ event.title if event else '' }}" required>
+    </label>
+
+    <label>Категория
+      <select name="category" required>
+        {% for key, label in categories.items() %}
+          <option value="{{ key }}" {% if event and event.category == key %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <div class="form-row">
+      <label>Дата
+        <input type="date" name="date" value="{{ event.date if event else '' }}" required>
+      </label>
+      <label>Время
+        <input type="time" name="time" value="{{ event.time if event else '' }}" required>
+      </label>
+    </div>
+
+    <label>Площадка
+      <input type="text" name="venue" value="{{ event.venue if event else '' }}" required>
+    </label>
+
+    <div class="form-row">
+      <label>Цена (₸)
+        <input type="number" name="price" value="{{ event.price if event else '' }}" min="1" required>
+      </label>
+      {% if action == 'create' %}
+      <label>Кол-во мест
+        <input type="number" name="seats_total" value="100" min="1" required>
+      </label>
+      {% endif %}
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">
+        {% if action == 'create' %}Создать{% else %}Сохранить{% endif %}
+      </button>
+      <a href="{{ url_for('catalog.list_events') }}" class="btn-ghost">Отмена</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

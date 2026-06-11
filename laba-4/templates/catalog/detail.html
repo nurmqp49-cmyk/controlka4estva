@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} — TicketBook{% endblock %}
+{% block content %}
+
+<div class="detail-wrap">
+  <a href="{{ url_for('catalog.list_events') }}" class="back-link">← Назад к афише</a>
+
+  <div class="detail-card">
+    <div class="detail-badge detail-badge--{{ event.category }}">
+      {{ categories[event.category] }}
+    </div>
+    <h1 class="detail-title">{{ event.title }}</h1>
+
+    <dl class="detail-meta">
+      <dt>Дата и время</dt><dd>{{ event.date }} в {{ event.time }}</dd>
+      <dt>Площадка</dt>   <dd>{{ event.venue }}</dd>
+      <dt>Стоимость</dt>  <dd class="price-big">{{ event.price }} ₸ / билет</dd>
+      <dt>Свободных мест</dt>
+      <dd class="{% if event.seats_left < 20 %}seats-low{% endif %}">
+        {{ event.seats_left }} из {{ event.seats_total }}
+      </dd>
+    </dl>
+
+    <div class="detail-actions">
+      {% if session.user_email %}
+        {% if event.seats_left > 0 %}
+          <a href="{{ url_for('booking.create_booking', event_id=event.id) }}" class="btn-primary">
+            🎟️ Забронировать билет
+          </a>
+        {% else %}
+          <button disabled class="btn-primary btn-disabled">Мест нет</button>
+        {% endif %}
+      {% else %}
+        <p>Для бронирования <a href="{{ url_for('auth.login') }}">войдите в систему</a>.</p>
+      {% endif %}
+
+      {% if session.user_role == 'admin' %}
+        <a href="{{ url_for('catalog.edit_event', event_id=event.id) }}" class="btn-outline">✏️ Редактировать</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

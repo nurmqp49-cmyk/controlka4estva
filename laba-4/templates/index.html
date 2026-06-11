@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}TicketBook — Главная{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Билеттер жүйесі — Казахстан</p>
+    <h1 class="hero-title">Қазақстанның үздік&nbsp;<br>іс-шараларына билеттер</h1>
+    <p class="hero-sub">Концерттер, театр, кино — бәрі бір жерде. Алматы, Астана, Шымкент және басқа қалалар.</p>
+    <a href="{{ url_for('catalog.list_events') }}" class="btn-primary">Смотреть афишу</a>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card hero-card--1">
+      <span class="hc-emoji">🎸</span>
+      <span class="hc-label">Концерты</span>
+    </div>
+    <div class="hero-card hero-card--2">
+      <span class="hc-emoji">🎭</span>
+      <span class="hc-label">Театр</span>
+    </div>
+    <div class="hero-card hero-card--3">
+      <span class="hc-emoji">🎬</span>
+      <span class="hc-label">Кино</span>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature-item">
+    <span class="fi-icon">🔐</span>
+    <h3>M1 — Auth</h3>
+    <p>Безопасная регистрация и вход. Каждая сессия получает уникальный <code>session_token</code>.</p>
+  </div>
+  <div class="feature-item">
+    <span class="fi-icon">📅</span>
+    <h3>M2 — Catalog</h3>
+    <p>Фильтрация афиши по категории и дате. Возвращает <code>event_id</code> для бронирования.</p>
+  </div>
+  <div class="feature-item">
+    <span class="fi-icon">🎟️</span>
+    <h3>M3 — Booking</h3>
+    <p>Принимает <code>session_token</code> и <code>event_id</code>, создаёт бронь и возвращает <code>booking_id</code>.</p>
+  </div>
+  <div class="feature-item">
+    <span class="fi-icon">💳</span>
+    <h3>M4 — Payment</h3>
+    <p>Принимает <code>booking_id</code>, проводит оплату и обновляет статус: <em>pending → paid / failed</em>.</p>
+  </div>
+</section>
+
+{% endblock %}

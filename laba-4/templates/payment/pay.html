@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Оплата — TicketBook{% endblock %}
+{% block content %}
+
+<div class="form-wrap">
+  <h2>Оплата бронирования</h2>
+
+  <div class="summary-box">
+    <h3>{{ booking.event_title }}</h3>
+    <p>📅 {{ booking.event_date }} &nbsp;⏰ {{ booking.event_time }}</p>
+    <p>Билетов: {{ booking.quantity }} шт.</p>
+    <p class="price-big">К оплате: {{ booking.total_price }} ₽</p>
+    <p class="small">ID брони: <code>{{ booking.id }}</code></p>
+  </div>
+
+  <form method="post" class="tb-form payment-form">
+    <label>Номер карты
+      <input type="text" name="card_number" placeholder="0000 0000 0000 0000"
+             maxlength="19" autocomplete="cc-number" id="card-input" required>
+    </label>
+    <div class="form-row">
+      <label>Срок действия
+        <input type="text" placeholder="ММ/ГГ" maxlength="5">
+      </label>
+      <label>CVV
+        <input type="password" placeholder="•••" maxlength="3">
+      </label>
+    </div>
+    <label>Имя на карте
+      <input type="text" placeholder="IVAN PETROV">
+    </label>
+
+    <div class="payment-note">
+      🔒 Это учебная система. Используйте <strong>любые 16 цифр</strong> в качестве номера карты.
+    </div>
+
+    <button type="submit" class="btn-primary btn-full">Оплатить {{ booking.total_price }} ₽</button>
+    <a href="{{ url_for('booking.my_bookings') }}" class="btn-ghost btn-full">Отмена</a>
+  </form>
+</div>
+
+<script>
+// Auto-format card number with spaces
+const cardInput = document.getElementById('card-input');
+cardInput.addEventListener('input', (e) => {
+  let v = e.target.value.replace(/\D/g,'').substring(0,16);
+  e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
+});
+</script>
+
+{% endblock %}

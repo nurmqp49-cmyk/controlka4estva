@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Бронирование — TicketBook{% endblock %}
+{% block content %}
+
+<div class="form-wrap">
+  <a href="{{ url_for('catalog.event_detail', event_id=event.id) }}" class="back-link">← Назад</a>
+  <h2>Бронирование билетов</h2>
+
+  <div class="summary-box">
+    <h3>{{ event.title }}</h3>
+    <p>📅 {{ event.date }} &nbsp;⏰ {{ event.time }}</p>
+    <p>📍 {{ event.venue }}</p>
+    <p>💰 {{ event.price }} ₸ за билет &nbsp;|&nbsp; Свободно: {{ event.seats_left }} мест</p>
+  </div>
+
+  <form method="post" class="tb-form">
+    <label>Количество билетов
+      <input type="number" name="quantity" value="1" min="1" max="{{ event.seats_left }}" required>
+    </label>
+    <p class="form-hint" id="total-hint">Итого: {{ event.price }} ₸</p>
+    <button type="submit" class="btn-primary btn-full">Подтвердить бронирование</button>
+  </form>
+</div>
+
+<script>
+const pricePerTicket = {{ event.price }};
+const input = document.querySelector('input[name="quantity"]');
+const hint  = document.getElementById('total-hint');
+input.addEventListener('input', () => {
+  const total = (parseInt(input.value) || 0) * pricePerTicket;
+  hint.textContent = `Итого: ${total.toLocaleString('kk-KZ')} ₸`;
+});
+</script>
+
+{% endblock %}

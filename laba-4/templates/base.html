@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TicketBook{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── NAV ────────────────────────────────────────────────────────── -->
+<nav class="navbar">
+  <a class="nav-brand" href="{{ url_for('index') }}">
+    <span class="brand-icon">🎭</span> TicketBook
+  </a>
+  <ul class="nav-links">
+    <li><a href="{{ url_for('catalog.list_events') }}">Афиша</a></li>
+    {% if session.user_email %}
+      <li><a href="{{ url_for('booking.my_bookings') }}">Мои билеты</a></li>
+      {% if session.user_role == 'admin' %}
+        <li><a href="{{ url_for('catalog.create_event') }}">+ Мероприятие</a></li>
+        <li><a href="{{ url_for('booking.admin_all') }}">Все брони</a></li>
+      {% endif %}
+      <li class="nav-user">{{ session.user_name }}</li>
+      <li><a class="btn-nav" href="{{ url_for('auth.logout') }}">Выйти</a></li>
+    {% else %}
+      <li><a href="{{ url_for('auth.login') }}">Войти</a></li>
+      <li><a class="btn-nav" href="{{ url_for('auth.register') }}">Регистрация</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<!-- ── FLASH MESSAGES ─────────────────────────────────────────────── -->
+<div class="flash-container">
+  {% for cat, msg in get_flashed_messages(with_categories=true) %}
+    <div class="flash flash-{{ cat }}">{{ msg }}</div>
+  {% endfor %}
+</div>
+
+<!-- ── MAIN ───────────────────────────────────────────────────────── -->
+<main class="main-content">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <p>© 2025 TicketBook — учебная система бронирования билетов (Казахстан)</p>
+  <p class="footer-modules">Модули: M1 Auth · M2 Catalog · M3 Booking · M4 Payment</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

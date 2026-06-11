@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Регистрация — TicketBook{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h2 class="auth-title">Создать аккаунт</h2>
+    <p class="auth-sub">Уже есть аккаунт? <a href="{{ url_for('auth.login') }}">Войдите</a></p>
+
+    <form method="post" class="auth-form">
+      <label>Имя
+        <input type="text" name="name" placeholder="Асель Нурланова" required>
+      </label>
+      <label>Email
+        <input type="email" name="email" placeholder="ivan@example.com" required>
+      </label>
+      <label>Пароль
+        <input type="password" name="password" placeholder="Минимум 6 символов" required minlength="6">
+      </label>
+      <button type="submit" class="btn-primary btn-full">Зарегистрироваться</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
